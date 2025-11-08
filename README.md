@@ -2,6 +2,81 @@
 
 A modern, responsive developer portfolio built with React and Vite, designed to showcase developer expertise through a professional and engaging interface.
 
+---
+
+## 🚀 Latest Updates (2025)
+
+- **Frontend now fetches all data from a single `public/developer.json` file** for profile, projects, posts, hero, about, and skills (no backend API required for content display).
+- **Contact form uses [EmailJS](https://www.emailjs.com/)** for sending messages directly to your email (no backend required for contact form).
+- **No auto-reply is sent to visitors**—only you receive the contact notification.
+- **Ready for Vercel deployment**: Just connect your repo and set environment variables in the Vercel dashboard.
+- **Environment variables** for EmailJS are now required:
+  - `VITE_EMAILJS_SERVICE_ID`
+  - `VITE_EMAILJS_TEMPLATE_ID`
+  - `VITE_EMAILJS_PUBLIC_KEY`
+
+---
+
+# Table of Contents
+- [Tech Stack](#tech-stack)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Development](#development)
+- [Project Structure](#project-structure)
+- [Features](#features)
+- [EmailJS Integration](#emailjs-integration)
+- [Vercel Deployment](#vercel-deployment)
+- [Customization](#customization)
+
+---
+
+# EmailJS Integration
+
+1. [Sign up for EmailJS](https://www.emailjs.com/) and connect your email service.
+2. Create an email template (use variables: `from_name`, `from_email`, `message`, `to_name`, `to_email`, `reply_to`).
+3. Add your EmailJS credentials to your `.env` file:
+   ```env
+   VITE_EMAILJS_SERVICE_ID=your_service_id
+   VITE_EMAILJS_TEMPLATE_ID=your_template_id
+   VITE_EMAILJS_PUBLIC_KEY=your_public_key
+   ```
+4. The contact form will send submissions to your email. No auto-reply is sent to the visitor.
+
+---
+
+# Vercel Deployment
+
+1. Push your code to GitHub (or GitLab/Bitbucket).
+2. Go to [Vercel](https://vercel.com/) and import your project.
+3. Set the following build settings (auto-detected for Vite):
+   - Build Command: `npm run build`
+   - Output Directory: `dist`
+4. Add your environment variables in the Vercel dashboard:
+   - `VITE_EMAILJS_SERVICE_ID`
+   - `VITE_EMAILJS_TEMPLATE_ID`
+   - `VITE_EMAILJS_PUBLIC_KEY`
+5. Deploy and get your live URL!
+
+---
+
+# Data Source
+
+- All portfolio content is loaded from `public/developer.json`.
+- To update your profile, projects, blog posts, or skills, just edit this JSON file.
+
+---
+
+# API Integration (Legacy/Optional)
+
+- The app can still be configured to use a backend API by setting `VITE_API_BASE_URL` in your `.env` file.
+- If the API is unavailable, fallback mock data is used.
+
+---
+
+# Developer Portfolio - Frontend
+
+A modern, responsive developer portfolio built with React and Vite, designed to showcase developer expertise through a professional and engaging interface.
+
 ## Portfolio Features
 
 ### **Core Portfolio Sections**
@@ -169,11 +244,11 @@ frontend/
 
 ---
 
-## API Integration
+## API Integration (Legacy/Optional)
 
-The frontend connects to the secure HTTPS backend at `https://localhost:3000`
+The frontend can optionally connect to a backend API if you set `VITE_API_BASE_URL` in your `.env` file. By default, all data is loaded from `public/developer.json` and no backend is required.
 
-### API Endpoints Used
+### API Endpoints (if using a backend)
 
 | Endpoint | Method | Purpose |
 |----------|--------|---------|
@@ -182,213 +257,22 @@ The frontend connects to the secure HTTPS backend at `https://localhost:3000`
 | `/posts` | GET | Fetch all blog posts |
 | `/contact` | POST | Submit contact form |
 
-### Handling Self-Signed Certificates
-
-During development with self-signed SSL certificates, you may encounter CORS or certificate errors.
-
-**Solutions**:
-
-1. **Accept Certificate in Browser**:
-   - Visit `https://localhost:3000` directly
-   - Accept the security warning
-   - Then use the frontend
-
-2. **Use HTTPS Proxy** (Recommended):
-   - Configure Vite proxy in `vite.config.js`:
-   ```javascript
-   server: {
-     proxy: {
-       '/api': {
-         target: 'https://localhost:3000',
-         secure: false,
-         changeOrigin: true,
-         rewrite: (path) => path.replace(/^\/api/, '')
-       }
-     }
-   }
-   ```
-
-3. **Development Mode Fallback**:
-   - The app includes fallback mock data
-   - If API fails, mock data displays automatically
-
-### CORS Configuration
-
-Ensure your backend has CORS enabled for frontend origin:
-
-```javascript
-// In backend server.js
-const cors = require('cors');
-app.use(cors({
-  origin: 'http://localhost:5173',
-  credentials: true
-}));
-```
+If the API is unavailable, the app will display fallback mock data.
 
 ---
 
-## Customization
-
-### Modify Content
-
-Edit `src/App.jsx` to change:
-- Profile information
-- Project details
-- Blog posts
-- Contact form fields
-
-### Update Styles
-
-Modify `src/index.css` for:
-- Custom animations
-- Global styles
-- Font families
-
-### Add New Sections
-
-1. Create section in `App.jsx`:
-```javascript
-<section id="new-section" className="min-h-screen py-20 px-4">
-  {/* Your content */}
-</section>
-```
-
-2. Add to navigation array:
-```javascript
-{['home', 'about', 'projects', 'blog', 'contact'].map(...)}
-```
-
----
-
-## Security Considerations
-
-### Content Security Policy
-
-The `index.html` includes CSP meta tags. 
-
-### API Security
-
-- ✅ All API calls use HTTPS
-- ✅ No sensitive data stored in frontend
-- ✅ Contact form validates input
-- ✅ CORS properly configured
-
-### Best Practices Implemented
-
-- Environment variables for API URLs (use `.env`)
-- Input sanitization on contact form
-- No inline JavaScript in HTML
-- Secure external links (`rel="noopener noreferrer"`)
-
----
-
-## Environment Variables
+# Environment Variables
 
 Create `.env`:
-Update this to backend URL
 ```
-VITE_API_BASE_URL=https://localhost:3000
+VITE_EMAILJS_SERVICE_ID=your_service_id
+VITE_EMAILJS_TEMPLATE_ID=your_template_id
+VITE_EMAILJS_PUBLIC_KEY=your_public_key
 ```
 
-Update API URL in `App.jsx`:
-```javascript
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://localhost:3000';
-```
-Environment
-VITE_ENV=development
-
 ---
 
-## Testing & Troubleshooting
-
-### API Connection Errors
-
-**Problem**: `Failed to fetch` or CORS errors
-
-**Solutions**:
-1. Ensure backend server is running on `https://localhost:3000`
-2. Accept the self-signed certificate in browser
-3. Check CORS configuration in backend
-4. Verify firewall isn't blocking port 3000
-
-
-### Mobile Menu Not Working
-
-**Problem**: Hamburger menu doesn't open
-
-**Solution**: Check that JavaScript is enabled and no console errors exist. Clear browser cache and hard reload.
-
----
-
-## Responsive Design Features
-
-- Stack layout on mobile
-- Grid layout on desktop
-- Collapsible navigation menu
-- Touch-friendly button sizes
-
----
-
-## Accessibility Features
-
-### Implemented Features
-
-- ✅ Semantic HTML5 elements
-- ✅ ARIA labels where needed
-- ✅ Keyboard navigation support
-- ✅ Focus indicators on interactive elements
-- ✅ Color contrast meets WCAG AA standards
-- ✅ Alt text for images (when applicable)
-- ✅ Screen reader friendly navigation
-
----
-
-## License
-
-This project is created for educational purposes as part of Web Security Course - Phase 1.
-
----
-
-## Author
-
-**Developer Portfolio Project**  
-Created as part of Web Security Course
-
----
-
-## Design Choices Explained
-
-### Color Palette
-
-- **Primary Purple (#7c3aed)**: Modern, professional, tech-oriented
-- **Accent Blue (#1d4ed8)**: Adds cool and visual interest
-- **Dark Background (#0f172a)**: Reduces eye strain, looks premium
-- **Gradient Effects**: Creates depth and modern aesthetic
-
-### Typography
-
-- System fonts for fast loading
-- Large headings for impact
-- Readable body text (16px+)
-- Proper line height for readability
-
-### Layout
-
-- **Max-width containers**: Improves readability on large screens
-- **Generous spacing**: Breathing room between sections
-- **Grid layouts**: Organized, scannable content
-- **Full-height sections**: Creates distinct content blocks
-
-### Animations
-
-- **Subtle hover effects**: Provides feedback without distraction
-- **Smooth transitions**: Professional polish
-- **Scale transforms**: Adds depth on interaction
-- **Gradient animations**: Eye-catching hero section
-
----
-
-## Quick Start Summary
+# Quick Start Summary
 
 ```bash
 # 1. Navigate to frontend directory
@@ -402,15 +286,13 @@ npm run dev
 
 # 4. Open browser to http://localhost:5173
 
-# 5. Ensure backend is running at https://localhost:3000
-
-# 6. Accept self-signed certificate warnings
-
-# 7. Enjoy your portfolio!
+# 5. Enjoy your portfolio!
 ```
 
 ---
 
 **Note** 
 
-For backend setup, see the main project README.md in the parent directory.
+For backend setup (optional), see the main project README.md in the parent directory.
+
+---

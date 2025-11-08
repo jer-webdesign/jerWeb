@@ -1,4 +1,4 @@
-# Developer Portfolio - Frontend
+# Developer Portfolio
 
 A modern, responsive developer portfolio built with React and Vite, designed to showcase developer expertise through a professional and engaging interface.
 
